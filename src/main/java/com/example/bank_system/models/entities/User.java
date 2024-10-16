@@ -1,5 +1,6 @@
 package com.example.bank_system.models.entities;
 
+import com.example.bank_system.models.dtos.UserDto;
 import lombok.Data;
 
 import javax.persistence.*;
