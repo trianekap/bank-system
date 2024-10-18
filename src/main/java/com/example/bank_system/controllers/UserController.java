@@ -5,6 +5,7 @@ import com.example.bank_system.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,14 +16,14 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/create")
-    public String create(@RequestBody UserDto userDto) {
+    public String create(@Valid @RequestBody UserDto userDto) {
         userService.create(userDto);
 
         return "user has been created!";
     }
 
     @PutMapping("/update/{id}")
-    public String update(@PathVariable Long id, @RequestBody UserDto userDto){
+    public String update(@PathVariable Long id, @Valid @RequestBody UserDto userDto){
         userService.update(id, userDto);
 
         return "user has been updated!";

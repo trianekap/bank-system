@@ -4,7 +4,6 @@ import com.example.bank_system.models.dtos.UserDto;
 import com.example.bank_system.models.entities.User;
 import com.example.bank_system.repositories.UserRepository;
 import com.example.bank_system.services.UserService;
-import com.example.bank_system.util.UserMapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +27,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(UserDto userDto) {
 
+        User user = userRepository.findByEmail(userDto.getEmail());
+
+        if (user != null){
+            throw new RuntimeException("email already used!");
+        }
+
         UserDto userDto1 = new UserDto();
         userDto1.setUsername(userDto.getUsername());
         userDto1.setEmail(userDto.getEmail());
@@ -37,8 +40,8 @@ public class UserServiceImpl implements UserService {
         userDto1.setRole(userDto.getRole());
         userDto1.setCreatedAt(LocalDateTime.now());
 
-        User user = toEntity(userDto1);
-        userRepository.save(user);
+        User user1 = toEntity(userDto1);
+        userRepository.save(user1);
     }
 
     @Override
@@ -53,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user1.setUsername(userDto.getUsername());
         user1.setEmail(userDto.getEmail());
         user1.setPassword(userDto.getPassword());
-        user1.setRole(UserMapper.convertRole(userDto.getRole()));
+        user1.setRole(userDto.getRole());
         user1.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user1);
